@@ -1,0 +1,283 @@
+<head>
+  <title>literalMe</title>
+</head>
+
+<body>
+  <div class="container">
+    {{> navBar}}
+
+    {{> addBook}}   
+    
+    <main role="main">
+      {{> myJumbo}}
+      <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row">     
+            {{> mainBody}}
+          </div>
+        </div>
+      </div>
+    </main>
+
+    {{> footerBar}}
+  </div>
+</body>
+
+<template name="navBar">
+  <header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+      <div class="container d-flex justify-content-between">
+        <a href="#" class="navbar-brand d-flex align-items-center">         
+          <strong>literalMe</strong>
+        </a>
+      </div>
+    </div>
+  </header>
+</template>
+
+<template name="myJumbo">
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">literalMe</h1>
+      <p class="lead text-muted">Glad you found your way here. It's always a good time to read a book. Find your passion amongst the stars by choosing from our many categories tailored just for you.</p>
+      <p>
+        <a href="#" class="btn btn-primary my-2">Top Rated Book</a>
+      </p>
+    </div>
+  </section>
+</template>
+
+<template name="mainBody">
+  {{#each mainBodySort}}  
+    {{> BookProfile}}
+      <div class="col-4">
+        <div class="card" style="width: 18rem;">
+          <img src="{{img}}" class="card-img-top" alt="Image Thumbnail">
+          <div class="card-body">
+            <h5 class="card-title displayIn">{{title}}</h5>
+            <p class="displayIn">by {{author}}</p>
+
+            <h5>Description</h5>
+            <p class="card-text">{{desc}}</p>
+
+            <div class="d-flex justify-content-center align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-secondary js-view">View</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary js-edit">Edit</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary js-delete">Delete</button>                    
+              </div>
+            </div>
+
+            <div class="row justify-content-center">
+              <div class="col-auto text-center thumbs-up">
+                <i class="zmdi zmdi-thumb-up js-upvote"><p class="upvote">{{upvote}}</p></i>          
+              </div>
+
+              <div class="col-auto text-center thumbs-down">
+                <i class="zmdi zmdi-thumb-down js-downvote"><p class="downvote">{{downvote}}</p></i>          
+              </div>
+            </div>             
+          </div>
+        </div>
+      </div>
+          
+  <div class="modal fade" id="editBook{{_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content text-light bg-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editBookInfo">Edit Book Information</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+
+            <!-- <input type="text" id="eBookID"> -->
+
+            <!-- Title -->
+            <div class="col-auto">
+              <label class="sr-only" for="Title">Title</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Title</div>
+                </div>
+                <input type="text" name="eTitle" class="form-control" id="eTitle" placeholder="Me Talk Pretty One Day">
+              </div>
+            </div>
+
+            <!-- Author -->
+            <div class="col-auto">
+              <label class="sr-only" for="Author">Author</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Author</div>
+                </div>
+                <input type="text" name="eAuthor" class="form-control" id="eAuthor" placeholder="David Sedaris">
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-auto">
+              <label class="sr-only" for="Description">Description</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Description</div>
+                </div>
+                <textarea name="eDescription" class="form-control" id="eDescription" rows="3" placeholder='Me Talk Pretty One Day, published in 2000, is a bestselling collection of essays by American humorist David Sedaris. The book is separated into two parts'></textarea>
+              </div>
+            </div>
+
+            <!-- Cover Image -->
+            <div class="col-auto mgZero">
+              <label class="sr-only" for="coverImage">Cover Image</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Cover Image</div>
+                </div>
+                <input type="text" name="eCoverImage" class="form-control" id="eCoverImage" placeholder="https://upload.wikimedia.org/wikipedia/en/0/0c/MeTalkPrettyOneDayCover.JPG">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary js-eSave">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+</template>
+
+<template name="addBook"> 
+  <div class="row addBookBtn">
+    <div class="col text-center">
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBook">
+        Add Book
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="addBook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content text-light bg-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBook">Add Books</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+
+            <!-- Title -->
+            <div class="col-auto">
+              <label class="sr-only" for="Title">Title</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Title</div>
+                </div>
+                <input type="text" name="Title" class="form-control" id="Title" placeholder="Me Talk Pretty One Day ">
+              </div>
+            </div>
+
+            <!-- Author -->
+            <div class="col-auto">
+              <label class="sr-only" for="Author">Author</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Author</div>
+                </div>
+                <input type="text" name="Author" class="form-control" id="Author" placeholder="David Sedaris">
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-auto">
+              <label class="sr-only" for="Description">Description</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Description</div>
+                </div>
+                <textarea name="Description" class="form-control" id="Description" rows="3" placeholder='Me Talk Pretty One Day, published in 2000, is a bestselling collection of essays by American humorist David Sedaris. The book is separated into two parts'></textarea>
+                
+              </div>
+            </div>
+
+            <!-- Cover Image -->
+            <div class="col-auto mgZero">
+              <label class="sr-only" for="coverImage">Cover Image</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Cover Image</div>
+                </div>
+                <input type="text" name="CoverImage" class="form-control" id="coverImage" placeholder="https://upload.wikimedia.org/wikipedia/en/0/0c/MeTalkPrettyOneDayCover.JPG">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary js-save">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="BookProfile">
+  <div class="modal fade" id="BookProfile{{_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content text-light bg-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="BookProfileTitle">Profile Books</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">          
+
+          <div class="row">
+            <div class="col text-center">
+              <h1 class="display-5">{{title}}</h1>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-8 text-center">
+              <p>Author: {{author}}</p>             
+              
+              <h4>Description</h4>
+              <p>{{desc}}</p>             
+
+              <p class="displayIn">Upvotes: {{upvote}}</p>
+              <p class="displayIn">Downvotes: {{downvote}}</p>
+            </div>
+
+            <div class="col-4">
+              <img id="img" src="{{img}}" alt="">
+            </div>
+          </div>
+        </div>              
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="footerBar">
+  <footer class="text-muted">
+    <div class="container">
+      <p class="float-right">
+        <a href="#">Back to top</a>
+      </p>
+      <p>&copy; WeTookYourDesignsInc</p>      
+    </div>
+  </footer>
+</template>
